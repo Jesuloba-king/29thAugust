@@ -1,12 +1,50 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class FinalPage extends StatelessWidget {
+class FinalPage extends StatefulWidget {
   const FinalPage({Key? key, required this.title}) : super(key: key);
   final String title;
 
+  @override
+  State<FinalPage> createState() => _FinalPageState();
+}
+
+class _FinalPageState extends State<FinalPage> {
   get formKey => null;
+  TextEditingController? emailTEC = TextEditingController();
+  TextEditingController? phoneN = TextEditingController();
+  TextEditingController? userN = TextEditingController();
+  TextEditingController? passW = TextEditingController();
+  TextEditingController? fullName = TextEditingController();
+
+  getEmail() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final getEmail = prefs.getString('Email');
+    final getPassword = prefs.getString('password');
+    final getUsername = prefs.getString('username');
+    final getPhoneNumber = prefs.getString('phone number');
+    final getname = prefs.getString('Full name');
+    setState(() {
+      emailTEC!.text= getEmail!;
+      passW!.text = getPassword!;
+      userN!.text = getUsername!;
+      fullName!.text = getname!;
+      phoneN!.text = getPhoneNumber!;
+
+    });
+    print(getEmail);
+    print(getPassword);
+    print(getname);
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getEmail();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,6 +118,7 @@ class FinalPage extends StatelessWidget {
                             //name field
                             const SizedBox(height: 5,),
                             TextFormField(
+                              controller: fullName,
                               validator: (String? val){
                                 if(val!.isEmpty){
                                   return "name is empty";
@@ -95,6 +134,7 @@ class FinalPage extends StatelessWidget {
                             //username field
                             const SizedBox(height: 10,),
                             TextFormField(
+                              controller: userN,
                               validator: (String? val){
                                 if(val!.isEmpty){
                                   return "username is empty";
@@ -109,6 +149,7 @@ class FinalPage extends StatelessWidget {
 
                             //Email field
                             TextFormField(
+                              controller: emailTEC,
                               validator: (String? val){
                                 if(val!.isEmpty){
                                   return "email is empty";
@@ -123,6 +164,7 @@ class FinalPage extends StatelessWidget {
                             //Phone number field
                             const SizedBox(height: 10,),
                             TextFormField(
+                              controller: phoneN,
                               validator: (String? val){
                                 if(val!.isEmpty){
                                   return "phone number is empty";
@@ -138,6 +180,7 @@ class FinalPage extends StatelessWidget {
                             //Password field
                             const SizedBox(height: 10,),
                             TextFormField(
+                              controller: passW,
                               validator: (String? val){
                                 if(val!.isEmpty){
                                   return "password is empty";

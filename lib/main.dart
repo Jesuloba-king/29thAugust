@@ -35,7 +35,11 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   get formKey => null;
-
+  TextEditingController? emailTEC = TextEditingController();
+  TextEditingController? fullName = TextEditingController();
+  TextEditingController? passW = TextEditingController();
+  TextEditingController? phoneN = TextEditingController();
+  TextEditingController? userN = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -95,6 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     child: Column(
                         children: [
                           TextFormField(
+                            controller: fullName,
                             validator: (String? val){
                               if(val!.isEmpty){
                                 return "full name is empty";
@@ -102,13 +107,14 @@ class _MyHomePageState extends State<MyHomePage> {
                               return null;
                             },
                             decoration: const InputDecoration(
-                                hintText: "FullName"
+                                hintText: "Full name"
                             ),
                           ),
 
                           //User name filed
                           const SizedBox(height: 30,),
                           TextFormField(
+                            controller: userN,
                             validator: (String? val){
                               if(val!.isEmpty){
                                 return "enter username";
@@ -116,7 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               return null;
                             },
                             decoration: const InputDecoration(
-                                hintText: "UserName"
+                                hintText: "Username"
                             ),
                           ),
 
@@ -140,6 +146,7 @@ class _MyHomePageState extends State<MyHomePage> {
                               const SizedBox(width: 50,),
                               Expanded(child:
                               TextFormField(
+                                controller: phoneN,
                                 validator: (String? val){
                                   if(val!.isEmpty){
                                     return "enter phone number";
@@ -147,7 +154,7 @@ class _MyHomePageState extends State<MyHomePage> {
                                   return null;
                                 },
                                 decoration: const InputDecoration(
-                                    hintText: "Telephone"
+                                    hintText: "Phone number"
                                 ),
                               ),),
                               const SizedBox(width: 27,),
@@ -157,6 +164,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           //Email field....
                           const SizedBox(height: 30,),
                           TextFormField(
+                            controller: emailTEC,
                             validator: (String? val){
                               if(val!.isEmpty){
                                 return "email is empty";
@@ -232,6 +240,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           //Password field
                           const SizedBox(height: 30,),
                           TextFormField(
+                            controller: passW,
                             validator: (String? val){
                               if(val!.isEmpty){
                                 return "password is empty";
@@ -266,10 +275,15 @@ class _MyHomePageState extends State<MyHomePage> {
                             disabledColor: CupertinoColors.activeOrange,
                             onPressed: () async {
                               SharedPreferences prefs = await SharedPreferences.getInstance();
-                              prefs.setStringList('Details',
-                                  <String> ['Email', 'useremail@gmail.com', 'Phone Number','Password',] );
-                              Navigator.push(context, MaterialPageRoute(builder: (context) {
-                              return const LoginPage(title: "Login");
+                              prefs.setString('Email', emailTEC!.text);
+                              prefs.setString('password', passW!.text);
+                              prefs.setString('username', userN!.text);
+                              prefs.setString('name', fullName!.text);
+                              prefs.setString('phone number', phoneN!.text);
+                              print(emailTEC!.text);
+                              print(fullName!.text);
+                              Navigator.push(context, MaterialPageRoute(builder: (contxt) {
+                              return  LoginPage(title: "Login");
                             }));},
                             child: Text('Create Account',
                               style: GoogleFonts.openSans(
@@ -283,27 +297,17 @@ class _MyHomePageState extends State<MyHomePage> {
                             textAlign: TextAlign.center,
                             style: GoogleFonts.openSans(
                               fontSize: 14,
-                              fontWeight: FontWeight.w700,
+                              fontWeight: FontWeight.w500,
                               color: Colors.black,
                             ),),
                           // const SizedBox(height: 30,),
-                          CupertinoButton.filled(
-                            borderRadius: BorderRadius.circular(100),
-                            onPressed: () async {
-                            SharedPreferences prefs = await SharedPreferences.getInstance();
-                            prefs.setStringList('Details',
-                                <String> ['Email', 'useremail@gmail.com', 'Phone Number','Password',] );
-                            Navigator.push(context, MaterialPageRoute(builder: (context) {
-                              return const LoginPage(title: "Login");
-                            }));},
-                            child: Text("Login",
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.openSans(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                                color: Colors.black,
-                              ),),
-                          ),
+                          Text("Login",
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.openSans(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),),
                         ],
                     ),
                   ),

@@ -1,14 +1,43 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'finalpage.dart';
 
-class LoginPage extends StatelessWidget {
-  const LoginPage({Key? key, required this.title}) : super(key: key);
+class LoginPage extends StatefulWidget {
+   LoginPage({Key? key, required this.title}) : super(key: key);
   final String title;
 
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   get formKey => null;
+
+  TextEditingController? emailTEC = TextEditingController();
+
+  get passW => null;
+
+  getEmail() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final getEmail = prefs.getString('Email');
+    final getPassword = prefs.getString('password');
+    setState(() {
+      emailTEC!.text= getEmail!;
+      passW!.text = getPassword!;
+    });
+    print(getEmail);
+    print(getPassword);
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getEmail();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -71,6 +100,7 @@ class LoginPage extends StatelessWidget {
                               //Email field....
                               const SizedBox(height: 30,),
                               TextFormField(
+                                controller: emailTEC,
                                 validator: (String? val){
                                   if(val!.isEmpty){
                                     return "email is empty";
@@ -101,7 +131,8 @@ class LoginPage extends StatelessWidget {
                               const SizedBox(height: 30),
                               CupertinoButton.filled(
                                 borderRadius: BorderRadius.circular(100),
-                                onPressed: () {Navigator.push(context, MaterialPageRoute(builder: (context) {
+                                onPressed: () async {
+                                  Navigator.push(context, MaterialPageRoute(builder: (context) {
                                   return const FinalPage(title: "Account info");
                                 }));},
                                 child: Text('Let\'s Celebrate',
